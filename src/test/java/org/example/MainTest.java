@@ -9,15 +9,37 @@ import org.junit.Test;
 
 public class MainTest {
     @Test
-    public void testServiceAutowired() throws Exception {
+    public void testRegisterAnyService() throws Exception {
         MyContainer container = new MyContainer();
 
-        // Scan and register classes with @Service annotations in the "com.example.services" package
-        container.scanAndRegister("org/example/services", container);
-
-        // Now, you can use your managed beans
+        // Register and inject the UserService
+        container.registerBean(UserService.class, NewsService.class);
         UserService userService = container.getBean(UserService.class);
+        NewsService newsService = container.getBean(NewsService.class);
+
         userService.performAction();
+        newsService.performAction();
+    }
+    @Test
+    public void testServiceFieldAutowired() throws Exception {
+        MyContainer container = new MyContainer();
+
+        // Register and inject the UserService
+        container.registerBean(UserService.class);
+        UserService userService = container.getBean(UserService.class);
+
+        userService.performAction();
+    }
+
+    @Test
+    public void testServiceConstructorAutowired() throws Exception {
+        MyContainer container = new MyContainer();
+
+        // Register and inject the NewsService
+        container.registerBean(NewsService.class);
+        NewsService newsService = container.getBean(NewsService.class);
+
+        newsService.performAction();
     }
 
     @Test

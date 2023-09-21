@@ -1,76 +1,72 @@
 package org.example;
 
-import org.example.services.NewsService;
-import org.example.services.UserService;
-
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Field;
+import java.util.*;
 
 public class MyContainer {
     private Map<Class<?>, Object> beanMap = new HashMap<>();
+    private List<Class<?>> registeredClasses = new ArrayList<>();
 
-    public void scanAndRegister(String basePackage, MyContainer container) throws Exception {
-//        List<Class<?>> classes = ClassScanner.findClassesWithAnnotation(basePackage, Service.class);
-        List<Class<?>> classes = new ArrayList<>();
-        classes.add(UserService.class);
-        classes.add(NewsService.class);
-        for (Class<?> clazz : classes) {
-            registerBean(clazz);
-            MyInjector.injectDependencies(beanMap.get(clazz), container);
-        }
-    }
+    public void registerBean(Class<?> ... listClazz) throws Exception {
+        for (Class<?> clazz : listClazz) {
+            if (!registeredClasses.contains(clazz)) {
+                registeredClasses.add(clazz);
+                // Check if the class has a constructor annotated with @Autowired
+                Constructor<?> constructor = findAutowiredConstructor(clazz);
 
-    public void registerBean(Class<?> clazz) throws Exception {
-        // Check if the class has a constructor annotated with @Autowired
-        Constructor<?> constructor = findAutowiredConstructor(clazz);
-        if (constructor == null) {
-            // If there's no constructor with @Autowired, create an instance without parameters
-            Object instance = clazz.getDeclaredConstructor().newInstance();
-            beanMap.put(clazz, instance);
-            return;
+                if (constructor != null) {
+                    Class<?>[] parameterTypes = constructor.getParameterTypes();
+                    Object[] constructorParams = new Object[parameterTypes.length];
+
+                    for (int i = 0; i < parameterTypes.length; i++) {
+                        Class<?> paramType = parameterTypes[i];
+                        Object dependency = getOrCreateBean(paramType);
+                        constructorParams[i] = dependency;
+                    }
+                    constructor.setAccessible(true);
+                    Object instance = constructor.newInstance(constructorParams);
+                    beanMap.put(clazz, instance);
+                } else {
+                    // If there's no constructor with @Autowired, create an instance without parameters
+                    Object instance = createInstance(clazz);
+                    beanMap.put(clazz, instance);
+                }
+                // Inject dependencies into fields
+                injectFields(beanMap.get(clazz), clazz);
+            }
         }
-        // Retrieve parameter types
-        Class<?>[] parameterTypes = constructor.getParameterTypes();
-        // Create instances of constructor parameters and pass them to the constructor
-        Object[] constructorParams = new Object[parameterTypes.length];
-        for (int i = 0; i < parameterTypes.length; i++) {
-            Class<?> paramType = parameterTypes[i];
-            constructorParams[i] = createInstance(paramType);
-        }
-        // Create an instance of the class using the constructor
-        Object instance = constructor.newInstance(constructorParams);
-        beanMap.put(clazz, instance);
     }
 
     private Constructor<?> findAutowiredConstructor(Class<?> clazz) {
-        for (Constructor<?> constructor : clazz.getDeclaredConstructors()) {
-            if (constructor.isAnnotationPresent(MyAutowired.class)) {
-                return constructor;
-            }
-        }
-        return null;
+        return Arrays.stream(clazz.getDeclaredConstructors())
+                .filter(constructor -> constructor.isAnnotationPresent(MyAutowired.class))
+                .findFirst()
+                .orElse(null);
     }
 
     private Object createInstance(Class<?> clazz) throws Exception {
-        // Recursively create instances for constructor parameters
+        return clazz.getDeclaredConstructor().newInstance();
+    }
+
+    private Object getOrCreateBean(Class<?> clazz) throws Exception {
         if (beanMap.containsKey(clazz)) {
             return beanMap.get(clazz);
-        } else {
-            Constructor<?> constructor = findAutowiredConstructor(clazz);
-            if (constructor != null) {
-                Class<?>[] parameterTypes = constructor.getParameterTypes();
-                Object[] constructorParams = new Object[parameterTypes.length];
-                for (int i = 0; i < parameterTypes.length; i++) {
-                    constructorParams[i] = createInstance(parameterTypes[i]);
-                }
-                Object instance = constructor.newInstance(constructorParams);
-                beanMap.put(clazz, instance);
-                return instance;
-            } else {
-                return clazz.getDeclaredConstructor().newInstance();
+        }
+        // Register and return the bean
+        registerBean(clazz);
+        return beanMap.get(clazz);
+    }
+
+    private void injectFields(Object target, Class<?> clazz) throws Exception {
+        Field[] fields = clazz.getDeclaredFields();
+
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(MyAutowired.class)) {
+                Class<?> fieldType = field.getType();
+                Object dependency = getOrCreateBean(fieldType);
+                field.setAccessible(true);
+                field.set(target, dependency);
             }
         }
     }
