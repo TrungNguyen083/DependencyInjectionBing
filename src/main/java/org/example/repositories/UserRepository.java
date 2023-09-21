@@ -1,11 +1,10 @@
 package org.example.repositories;
 
-import org.example.CrudRepository;
-import org.example.MyAutowired;
+import org.example.DILibrary.annotation.MyAutowired;
 
 public class UserRepository {
     @MyAutowired
-    CrudRepository crudRepository;
+    CrudRepositoryCustom crudRepository;
     public void saveUser() {
         crudRepository.save();
     }

@@ -25,6 +25,11 @@
             <artifactId>reflections</artifactId>
             <version>0.9.12</version> <!-- Use the latest version available -->
         </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version>
+        </dependency>
     </dependencies>
 
 </project>

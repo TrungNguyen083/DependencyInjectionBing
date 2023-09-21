@@ -1,4 +1,6 @@
-package org.example;
+package org.example.DILibrary;
+
+import org.example.DILibrary.annotation.MyAutowired;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -10,12 +12,12 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MyInjector {
-    public static void injectDependencies(Object target, MyContainer container) {
+    public static void injectDependencies(Object target, MyContainer container) throws Exception {
         injectFields(target, container);
         injectConstructors(target, container);
     }
 
-    private static void injectFields(Object target, MyContainer container){
+    private static void injectFields(Object target, MyContainer container) {
         Class<?> clazz = target.getClass();
         Field[] fields = clazz.getDeclaredFields();
 
@@ -36,7 +38,7 @@ public class MyInjector {
                 });
     }
 
-    private static void injectConstructors(Object target, MyContainer container) {
+    private static Object injectConstructors(Object target, MyContainer container) throws Exception {
         Class<?> clazz = target.getClass();
         Constructor<?>[] constructors = clazz.getDeclaredConstructors();
 
@@ -51,26 +53,21 @@ public class MyInjector {
                     Class<?> paramType = parameterTypes[i];
                     Object dependency = container.getBean(paramType);
 
-                    if (dependency != null) {
-                        dependencies[i] = dependency;
-                    } else {
+                    if (dependency == null) {
                         allDependenciesAvailable = false;
                         break; // Exit the loop if any dependency is missing
                     }
+                    dependencies[i] = dependency;
                 }
 
                 if (allDependenciesAvailable) {
-                    try {
-                        constructor.setAccessible(true);
-                        Object newInstance = constructor.newInstance(dependencies);
-                        // Replace the original target with the new instance
-                        target = newInstance;
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    constructor.setAccessible(true);
+                    Object newInstance = constructor.newInstance(dependencies);
+                    return newInstance; // Return the new instance
                 }
             }
         }
+        return target;
     }
 
     private static void injectMethods(Object target, MyContainer container) {

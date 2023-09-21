@@ -1,13 +1,48 @@
 package org.example;
 
 
+import org.example.DILibrary.MyContainer;
+import org.example.DILibrary.MyInjector;
+import org.example.controller.AdArticleController;
+import org.example.models.AdArticle;
+import org.example.repositories.CrudRepositoryCustom;
 import org.example.repositories.NewsRepository;
+import org.example.services.AdArticleService;
 import org.example.services.NewsService;
 import org.example.repositories.UserRepository;
 import org.example.services.UserService;
 import org.junit.Test;
 
+import java.util.List;
+
+import static org.junit.Assert.assertNotNull;
+
 public class MainTest {
+    @Test
+    public void testScanAllController() throws Exception {
+        MyContainer container = new MyContainer();
+
+        // Scan and register controller classes in a specific base package
+        container.scanAndRegisterControllers("E:\\BBV\\Source code\\testAutowired\\src\\main\\java\\org\\example\\controller");
+
+        // Get instances of controller classes from the container
+        AdArticleController adArticleController = container.getBean(AdArticleController.class);
+        // Access controller methods
+        List<AdArticle> adArticleList = adArticleController.getAllAd();
+        adArticleList.forEach(AdArticle::printInfo);
+    }
+
+    @Test
+    public void testGetAllAdArticle() throws Exception {
+        MyContainer container = new MyContainer();
+        container.registerBean(AdArticleController.class);
+        AdArticleController adArticleController = container.getBean(AdArticleController.class);
+        List<AdArticle> adArticleList = adArticleController.getAllAd();
+        adArticleList.forEach(AdArticle::printInfo);
+
+        assertNotNull(adArticleList);
+    }
+
     @Test
     public void testRegisterAnyService() throws Exception {
         MyContainer container = new MyContainer();
@@ -46,7 +81,7 @@ public class MainTest {
     public void testFieldAutowired() throws Exception {
         MyContainer container = new MyContainer();
         // Register instances with the container
-        container.registerBean(CrudRepository.class);
+        container.registerBean(CrudRepositoryCustom.class);
         container.registerBean(UserRepository.class);
         container.registerBean(UserService.class);
 
@@ -62,7 +97,7 @@ public class MainTest {
     public void testConstructorAutowired() throws Exception {
         MyContainer container = new MyContainer();
         // Register instances with the container
-        container.registerBean(CrudRepository.class);
+        container.registerBean(CrudRepositoryCustom.class);
         container.registerBean(NewsRepository.class);
         container.registerBean(NewsService.class);
 

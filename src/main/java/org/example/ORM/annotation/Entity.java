@@ -1,11 +1,12 @@
-package org.example;
+package org.example.ORM.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target({ElementType.FIELD, ElementType.METHOD, ElementType.CONSTRUCTOR})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface MyAutowired {
+@Target(ElementType.TYPE)
+public @interface Entity {
+    String name() default "";
 }

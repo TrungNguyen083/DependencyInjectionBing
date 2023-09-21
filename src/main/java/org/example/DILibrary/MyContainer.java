@@ -1,4 +1,7 @@
-package org.example;
+package org.example.DILibrary;
+
+import org.example.DILibrary.annotation.Controller;
+import org.example.DILibrary.annotation.MyAutowired;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -7,6 +10,13 @@ import java.util.*;
 public class MyContainer {
     private Map<Class<?>, Object> beanMap = new HashMap<>();
     private List<Class<?>> registeredClasses = new ArrayList<>();
+
+    public void scanAndRegisterControllers(String basePackage) throws Exception {
+        List<Class<?>> classes = ClassScanner.findClassesWithAnnotation(basePackage, Controller.class);
+        for (Class<?> clazz : classes) {
+            registerBean(clazz);
+        }
+    }
 
     public void registerBean(Class<?> ... listClazz) throws Exception {
         for (Class<?> clazz : listClazz) {

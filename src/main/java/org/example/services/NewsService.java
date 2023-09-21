@@ -1,6 +1,6 @@
 package org.example.services;
 
-import org.example.MyAutowired;
+import org.example.DILibrary.annotation.MyAutowired;
 import org.example.repositories.NewsRepository;
 
 public class NewsService {
