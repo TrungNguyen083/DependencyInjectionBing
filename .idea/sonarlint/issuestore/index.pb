@@ -9,15 +9,7 @@ W
 'src/test/java/org/example/MainTest.java,b\0\b09397c2c13905fa2b6977e3f656e76012cc362c
 ]
 -src/main/java/org/example/CrudRepository.java,f\3\f393baeca7c7aa5d730d5c6e8a1ececa3cf93635
-f
-6src/main/java/org/example/UserExample/UserService.java,c\f\cfd8c6e69da72c1f21eaa7ef990ea7ad9cb35f3d
-i
-9src/main/java/org/example/UserExample/UserRepository.java,f\a\fa64e368e8dfbff828ab2dd6b9263088109fe949
 Z
 *src/main/java/org/example/MyContainer.java,f\f\ffaf723871585de27b8715f1fda7cd14abb547d0
-i
-9src/main/java/org/example/NewsExample/NewsRepository.java,e\4\e4d4d47177803cb70e171461facb1c50e180fc26
-f
-6src/main/java/org/example/NewsExample/NewsService.java,3\f\3fedc9f715985d15a02c94a31533ee3cd9a87299
 Y
 )src/main/java/org/example/MyInjector.java,c\7\c7c03bf0308c1803f40b93a5d4d32dd4e2dc50a4
