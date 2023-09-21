@@ -40,27 +40,37 @@ public class MyInjector {
         Class<?> clazz = target.getClass();
         Constructor<?>[] constructors = clazz.getDeclaredConstructors();
 
-        Arrays.stream(constructors)
-                .filter(constructor -> constructor.isAnnotationPresent(MyAutowired.class))
-                .forEach(constructor -> {
-                    Class<?>[] parameterTypes = constructor.getParameterTypes();
-                    List<Object> dependencies = Arrays.stream(parameterTypes)
-                            .map(container::getBean)
-                            .filter(Objects::nonNull)
-                            .collect(Collectors.toList());
+        for (Constructor<?> constructor : constructors) {
+            if (constructor.isAnnotationPresent(MyAutowired.class)) {
+                Class<?>[] parameterTypes = constructor.getParameterTypes();
+                Object[] dependencies = new Object[parameterTypes.length];
 
-                    if (!dependencies.isEmpty()) {
-                        constructor.setAccessible(true);
-                        try {
-                            var newTarget = constructor.newInstance(dependencies.toArray());
-                            injectDependencies(newTarget, container);
-                        } catch (Exception e) {
-                            throw new RuntimeException(e);
-                        }
+                boolean allDependenciesAvailable = true;
+
+                for (int i = 0; i < parameterTypes.length; i++) {
+                    Class<?> paramType = parameterTypes[i];
+                    Object dependency = container.getBean(paramType);
+
+                    if (dependency != null) {
+                        dependencies[i] = dependency;
+                    } else {
+                        allDependenciesAvailable = false;
+                        break; // Exit the loop if any dependency is missing
                     }
-                });
+                }
 
-
+                if (allDependenciesAvailable) {
+                    try {
+                        constructor.setAccessible(true);
+                        Object newInstance = constructor.newInstance(dependencies);
+                        // Replace the original target with the new instance
+                        target = newInstance;
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
     }
 
     private static void injectMethods(Object target, MyContainer container) {

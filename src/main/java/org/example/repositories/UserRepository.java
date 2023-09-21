@@ -1,4 +1,7 @@
-package org.example;
+package org.example.repositories;
+
+import org.example.CrudRepository;
+import org.example.MyAutowired;
 
 public class UserRepository {
     @MyAutowired
