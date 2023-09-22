@@ -5,6 +5,8 @@ import org.example.dilibrary.annotation.MyAutowired;
 import org.example.models.AdArticle;
 import org.example.services.AdArticleService;
 
+import java.lang.reflect.InvocationTargetException;
+import java.sql.SQLException;
 import java.util.List;
 
 @Controller
@@ -16,7 +18,7 @@ public class AdArticleController {
         this.adArticleService = adArticleService;
     }
 
-    public List<AdArticle> getAllAd() throws Exception {
+    public List<AdArticle> getAllAd() throws SQLException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
         return adArticleService.getAll();
     }
 }

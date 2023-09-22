@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class CrudRepositoryImp<T, ID> implements CrudRepository<T, ID>, Pagination<T, ID>, QueryPredicateExecutor<T> {
-    private Class<T> entityClass;
+    private final Class<T> entityClass;
     ConnectionManager connectionManager;
     Connection dbConnection;
     Statement statement;
