@@ -4,6 +4,7 @@ import org.example.dilibrary.annotation.MyAutowired;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 public class MyInjector {
@@ -27,14 +28,14 @@ public class MyInjector {
                         field.setAccessible(true);
                         try {
                             field.set(target, dependency);
-                        } catch (Exception e) {
-                            throw new RuntimeException("Error", e);
+                        } catch (IllegalAccessException e) {
+                            throw new RuntimeException(e);
                         }
                     }
                 });
     }
 
-    private static Object injectConstructors(Object target, MyContainer container) throws Exception {
+    private static Object injectConstructors(Object target, MyContainer container) throws InvocationTargetException, InstantiationException, IllegalAccessException {
         Class<?> clazz = target.getClass();
         Constructor<?>[] constructors = clazz.getDeclaredConstructors();
 
@@ -59,7 +60,6 @@ public class MyInjector {
                 if (allDependenciesAvailable) {
                     constructor.setAccessible(true);
                     return constructor.newInstance(dependencies);
-
                 }
             }
         }

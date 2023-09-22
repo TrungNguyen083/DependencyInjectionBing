@@ -21,6 +21,6 @@ public class SelectByIdQueryBuilder {
                 return query.toString();
             }
         }
-        throw new RuntimeException("No primary key found");
+        return null;
     }
 }

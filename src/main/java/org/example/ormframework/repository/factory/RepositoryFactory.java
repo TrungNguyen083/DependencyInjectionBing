@@ -10,7 +10,7 @@ import java.lang.reflect.Proxy;
 public class RepositoryFactory {
     private RepositoryFactory() {}
 
-    public static CrudRepository createRepoImpl(Class<?> repoInterface) throws Exception {
+    public static CrudRepository createRepoImpl(Class repoInterface) throws Exception {
         ParameterizedType type = (ParameterizedType) repoInterface.getGenericInterfaces()[0];
         InvocationHandler handler = new RepositoryInvocationHandler(new CrudRepositoryImp(type));
         return (CrudRepository) Proxy.newProxyInstance(repoInterface.getClassLoader(), new Class[]{repoInterface}, handler);

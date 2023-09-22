@@ -8,6 +8,7 @@ import org.example.configuration.ConfigService;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.List;
 
@@ -70,7 +71,7 @@ public class MyContainer {
                 .orElse(null);
     }
 
-    private Object createInstance(Class<?> clazz) throws Exception {
+    private Object createInstance(Class<?> clazz) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
         return clazz.getDeclaredConstructor().newInstance();
     }
 

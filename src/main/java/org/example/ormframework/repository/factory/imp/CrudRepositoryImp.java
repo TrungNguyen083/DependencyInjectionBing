@@ -6,7 +6,9 @@ import org.example.ormframework.predicate.QueryPredicateExecutor;
 import org.example.ormframework.query.QueryGenerator;
 import org.example.ormframework.repository.CrudRepository;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -23,7 +25,7 @@ public class CrudRepositoryImp<T, ID> implements CrudRepository<T, ID>, Paginati
     Statement statement;
 
 
-    public CrudRepositoryImp(ParameterizedType type) throws Exception {
+    public CrudRepositoryImp(ParameterizedType type) throws SQLException, ClassNotFoundException, IOException {
         entityClass = (Class<T>) type.getActualTypeArguments()[0];
 
         connectionManager = new ConnectionManager();
@@ -32,7 +34,7 @@ public class CrudRepositoryImp<T, ID> implements CrudRepository<T, ID>, Paginati
     }
 
     @Override
-    public void save(T entity) throws Exception {
+    public void save(T entity) throws SQLException, IllegalAccessException {
         String insertQuery = QueryGenerator.insertQuery(entity);
         statement.execute(insertQuery);
     }
@@ -50,20 +52,20 @@ public class CrudRepositoryImp<T, ID> implements CrudRepository<T, ID>, Paginati
     }
 
     @Override
-    public T findById(ID id) throws Exception {
+    public T findById(ID id) throws SQLException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
         String selectQuery = QueryGenerator.selectByIdQuery(entityClass, id);
         return getResultSet(statement, selectQuery).get(0);
     }
 
     @Override
-    public List<T> findAll() throws Exception {
+    public List<T> findAll() throws SQLException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
         String selectQuery = QueryGenerator.selectAllQuery(entityClass);
         statement.executeQuery(selectQuery);
         return getResultSet(statement, selectQuery);
     }
 
     @Override
-    public List<T> find(Predicate<T> predicate) throws Exception {
+    public List<T> find(Predicate<T> predicate) throws SQLException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
         var selectAllQuery = QueryGenerator.selectAllQuery(entityClass);
         List<T> list = getResultSet(statement, selectAllQuery);
         List<T> filteredList = new ArrayList<>();
@@ -94,13 +96,13 @@ public class CrudRepositoryImp<T, ID> implements CrudRepository<T, ID>, Paginati
     }
 
     @Override
-    public long count(Predicate<T> predicate) throws Exception {
+    public long count(Predicate<T> predicate) throws SQLException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
         var list = getResultSet(statement, QueryGenerator.selectAllQuery(entityClass));
         return list.stream().filter(predicate).count();
     }
 
     @Override
-    public List<T> getInPage(int page, int size) throws Exception {
+    public List<T> getInPage(int page, int size) throws SQLException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
         var selectAllQuery = QueryGenerator.selectAllQuery(entityClass);
         List<T> list = getResultSet(statement, selectAllQuery);
         List<T> filteredList = new ArrayList<>();
