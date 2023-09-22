@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 public class MyInjector {
     private MyInjector() {}
-    public static void injectDependencies(Object target, MyContainer container) throws Exception {
+    public static void injectDependencies(Object target, MyContainer container) throws InvocationTargetException, InstantiationException, IllegalAccessException {
         injectFields(target, container);
         injectConstructors(target, container);
     }
