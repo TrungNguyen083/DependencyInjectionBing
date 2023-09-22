@@ -91,7 +91,6 @@ public class ControllerManager {
                         }
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
                     sendJsonResponse(exchange, 500, "Internal Server Error");
                 }
             } else {
