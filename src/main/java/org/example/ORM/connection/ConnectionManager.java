@@ -1,26 +1,31 @@
 package org.example.ORM.connection;
 
+import org.example.ORM.configuration.DBConnectionConfig;
+import org.example.configuration.ConfigService;
+
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class ConnectionManager {
-    private static Connection connection;
-    private static final String URL = "jdbc:mysql://localhost:3306/bingnews";
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "nguyen12";
+    private Connection connection;
+    private ConfigService configService;
+    private final DBConnectionConfig dbConnectionConfig;
 
-    private ConnectionManager() {
+    public ConnectionManager() throws IOException {
+        configService = new ConfigService();
+        dbConnectionConfig = configService.readConfig("src\\main\\resources\\DbConnect.json", DBConnectionConfig.class);
     }
 
-    public static Connection getConnection() {
+    public Connection getConnection() {
         if (connection == null) {
             try {
                 // Load the JDBC driver
                 Class.forName("com.mysql.cj.jdbc.Driver");
 
                 // Create the connection
-                connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+                connection = DriverManager.getConnection(dbConnectionConfig.getURL(), dbConnectionConfig.getUsername(), dbConnectionConfig.getPassword());
             } catch (ClassNotFoundException | SQLException e) {
                 e.printStackTrace();
                 throw new RuntimeException("Failed to establish a database connection.");
@@ -29,10 +34,10 @@ public class ConnectionManager {
         return connection;
     }
 
-    public static void closeConnection(Connection connection) {
-        if (ConnectionManager.connection != null) {
+    public void closeConnection() {
+        if (connection != null) {
             try {
-                ConnectionManager.connection.close();
+                connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
                 throw new RuntimeException("Failed to close the database connection.");

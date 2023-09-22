@@ -9,7 +9,7 @@ import java.util.List;
 public class AdArticleService {
     private final AdArticleRepository adArticleRepository;
 
-    public AdArticleService() {
+    public AdArticleService() throws Exception {
         Class<?> interfaceToImplement = AdArticleRepository.class;
         this.adArticleRepository = (AdArticleRepository) RepositoryFactory.createRepoImpl(interfaceToImplement);
     }

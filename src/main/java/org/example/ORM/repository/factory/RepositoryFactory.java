@@ -11,7 +11,7 @@ public class RepositoryFactory {
     public RepositoryFactory() {
     }
 
-    public static CrudRepository createRepoImpl(Class<?> repoInterface) {
+    public static CrudRepository createRepoImpl(Class<?> repoInterface) throws Exception {
         ParameterizedType type = (ParameterizedType) repoInterface.getGenericInterfaces()[0];
         InvocationHandler handler = new RepositoryInvocationHandler(new CrudRepositoryImp(type));
         return (CrudRepository) Proxy.newProxyInstance(repoInterface.getClassLoader(), new Class[]{repoInterface}, handler);

@@ -1,0 +1,5 @@
+{
+  "URL": "jdbc:mysql://localhost:3306/bingnews",
+  "USERNAME": "root",
+  "PASSWORD": "nguyen12"
+}
