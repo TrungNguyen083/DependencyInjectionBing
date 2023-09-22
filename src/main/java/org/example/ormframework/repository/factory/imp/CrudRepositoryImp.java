@@ -38,13 +38,13 @@ public class CrudRepositoryImp<T, ID> implements CrudRepository<T, ID>, Paginati
     }
 
     @Override
-    public void update(T entity) throws SQLException {
+    public void update(T entity) throws SQLException, IllegalAccessException {
         String updateQuery = QueryGenerator.updateQuery(entity);
         statement.execute(updateQuery);
     }
 
     @Override
-    public void delete(ID id) throws SQLException {
+    public void delete(ID id) throws SQLException, IllegalAccessException {
         String deleteQuery = QueryGenerator.deleteQuery(id);
         statement.execute(deleteQuery);
     }
