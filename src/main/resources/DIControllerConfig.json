@@ -1,0 +1,5 @@
+{
+  "basePackage": ".\\src\\main\\java\\org\\example\\controller",
+  "fileExtension": ".java",
+  "forNamePackage": "org.example.controller."
+}

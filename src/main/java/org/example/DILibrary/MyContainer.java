@@ -2,17 +2,31 @@ package org.example.DILibrary;
 
 import org.example.DILibrary.annotation.Controller;
 import org.example.DILibrary.annotation.MyAutowired;
+import org.example.DILibrary.configuaration.ControllerConfig;
+import org.example.configuration.ConfigService;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.*;
 
 public class MyContainer {
-    private Map<Class<?>, Object> beanMap = new HashMap<>();
-    private List<Class<?>> registeredClasses = new ArrayList<>();
+    private final Map<Class<?>, Object> beanMap;
+    private final List<Class<?>> registeredClasses;
+    ConfigService configService;
 
-    public void scanAndRegisterControllers(String basePackage) throws Exception {
-        List<Class<?>> classes = ClassScanner.findClassesWithAnnotation(basePackage, Controller.class);
+    private final ControllerConfig controllerConfig;
+
+    public MyContainer() throws IOException {
+        beanMap = new HashMap<>();
+        registeredClasses = new ArrayList<>();
+        configService = new ConfigService();
+        controllerConfig = configService.readConfig("src\\main\\resources\\DIControllerConfig.json", ControllerConfig.class);
+    }
+
+    public void scanAndRegisterControllers() throws Exception {
+        String basePackage = controllerConfig.getBasePackage();
+        List<Class<?>> classes = ClassScanner.findClassesWithAnnotation(basePackage, Controller.class, controllerConfig);
         for (Class<?> clazz : classes) {
             registerBean(clazz);
         }

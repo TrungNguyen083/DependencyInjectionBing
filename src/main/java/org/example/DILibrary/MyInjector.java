@@ -4,12 +4,7 @@ import org.example.DILibrary.annotation.MyAutowired;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 public class MyInjector {
     public static void injectDependencies(Object target, MyContainer container) throws Exception {
@@ -68,27 +63,5 @@ public class MyInjector {
             }
         }
         return target;
-    }
-
-    private static void injectMethods(Object target, MyContainer container) {
-        Class<?> clazz = target.getClass();
-        Method[] methods = clazz.getDeclaredMethods();
-
-        Arrays.stream(methods)
-                .filter(method -> method.isAnnotationPresent(MyAutowired.class))
-                .forEach(method -> {
-                    Class<?>[] parameterTypes = method.getParameterTypes();
-                    List<Object> dependencies = Arrays.stream(parameterTypes)
-                            .map(container::getBean)
-                            .filter(Objects::nonNull)
-                            .collect(Collectors.toList());
-
-                    method.setAccessible(true);
-                    try {
-                        method.invoke(target, dependencies.toArray());
-                    } catch (IllegalAccessException | InvocationTargetException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
     }
 }
