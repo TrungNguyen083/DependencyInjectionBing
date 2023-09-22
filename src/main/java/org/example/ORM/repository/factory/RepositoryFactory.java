@@ -8,8 +8,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
 
 public class RepositoryFactory {
-    public RepositoryFactory() {
-    }
+    private RepositoryFactory() {}
 
     public static CrudRepository createRepoImpl(Class<?> repoInterface) throws Exception {
         ParameterizedType type = (ParameterizedType) repoInterface.getGenericInterfaces()[0];
