@@ -6,13 +6,12 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 public class RepositoryInvocationHandler implements InvocationHandler {
-    private CrudRepositoryImp crudRepositoryImpl;
-    public RepositoryInvocationHandler(CrudRepositoryImp _crudRepositoryImpl) {
-        crudRepositoryImpl = _crudRepositoryImpl;
+    private final CrudRepositoryImp crudRepositoryImpl;
+    public RepositoryInvocationHandler(CrudRepositoryImp crudRepositoryImpl) {
+        this.crudRepositoryImpl = crudRepositoryImpl;
     }
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        Object result = method.invoke(crudRepositoryImpl, args);
-        return result;
+        return method.invoke(this.crudRepositoryImpl, args);
     }
 }

@@ -6,7 +6,8 @@ import org.example.ormframework.annotation.Primary;
 import java.lang.reflect.Field;
 
 public class QueryGenerator {
-    static public String insertQuery(Object object) {
+    private QueryGenerator() {}
+    public static String insertQuery(Object object) {
         StringBuilder sb = new StringBuilder();
         sb.append("INSERT INTO ");
         sb.append(object.getClass().getSimpleName());
@@ -33,7 +34,7 @@ public class QueryGenerator {
         return sb.toString();
     }
 
-    static public String updateQuery(Object object) {
+    public static String updateQuery(Object object) {
         StringBuilder sb = new StringBuilder();
         sb.append("UPDATE ");
         sb.append(object.getClass().getSimpleName());
@@ -72,7 +73,7 @@ public class QueryGenerator {
         return sb.toString();
     }
 
-    static public String deleteQuery(Object object) {
+    public static String deleteQuery(Object object) {
         StringBuilder sb = new StringBuilder();
         sb.append("DELETE FROM ");
         sb.append(object.getClass().getSimpleName());
@@ -95,7 +96,7 @@ public class QueryGenerator {
         return sb.toString();
     }
 
-    static public String selectAllQuery(Class<?> clazz) {
+    public static String selectAllQuery(Class<?> clazz) {
         Entity entity = clazz.getAnnotation(Entity.class);
         StringBuilder sb = new StringBuilder();
         sb.append("SELECT * FROM ");

@@ -60,13 +60,4 @@ public class AdArticle {
     public String getAdLink() {
         return adLink;
     }
-
-    public void printInfo() {
-        System.out.println("guid: " + guid);
-        System.out.println("adImage: " + adImage);
-        System.out.println("adTitle: " + adTitle);
-        System.out.println("adSource: " + adSource);
-        System.out.println("adLink: " + adLink);
-        System.out.println("__________________________________");
-    }
 }

@@ -27,8 +27,8 @@ public class MyInjector {
                         field.setAccessible(true);
                         try {
                             field.set(target, dependency);
-                        } catch (IllegalAccessException e) {
-                            throw new RuntimeException(e);
+                        } catch (Exception e) {
+                            throw new RuntimeException("Error", e);
                         }
                     }
                 });
