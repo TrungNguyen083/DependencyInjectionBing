@@ -6,6 +6,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class MyInjector {
     private MyInjector() {}
@@ -35,34 +36,27 @@ public class MyInjector {
                 });
     }
 
-    private static Object injectConstructors(Object target, MyContainer container) throws InvocationTargetException, InstantiationException, IllegalAccessException {
+    private static void injectConstructors(Object target, MyContainer container) throws InvocationTargetException, InstantiationException, IllegalAccessException {
         Class<?> clazz = target.getClass();
         Constructor<?>[] constructors = clazz.getDeclaredConstructors();
 
         for (Constructor<?> constructor : constructors) {
             if (constructor.isAnnotationPresent(MyAutowired.class)) {
                 Class<?>[] parameterTypes = constructor.getParameterTypes();
-                Object[] dependencies = new Object[parameterTypes.length];
 
-                boolean allDependenciesAvailable = true;
-
-                for (int i = 0; i < parameterTypes.length; i++) {
-                    Class<?> paramType = parameterTypes[i];
-                    Object dependency = container.getBean(paramType);
-
-                    if (dependency == null) {
-                        allDependenciesAvailable = false;
-                        break; // Exit the loop if any dependency is missing
-                    }
-                    dependencies[i] = dependency;
-                }
+                boolean allDependenciesAvailable = Arrays.stream(parameterTypes)
+                        .map(container::getBean)
+                        .noneMatch(Objects::isNull);
 
                 if (allDependenciesAvailable) {
                     constructor.setAccessible(true);
-                    return constructor.newInstance(dependencies);
+                    Object[] dependencies = Arrays.stream(parameterTypes)
+                            .map(container::getBean)
+                            .toArray();
+                    constructor.newInstance(dependencies);
+                    return;
                 }
             }
         }
-        return target;
     }
 }
