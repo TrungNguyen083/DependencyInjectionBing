@@ -9,7 +9,7 @@ public class QueryGenerator {
     private QueryGenerator() {
     }
 
-    public static String insertQuery(Object object) throws Exception {
+    public static String insertQuery(Object object) throws IllegalAccessException {
         StringBuilder sb = new StringBuilder();
         sb.append("INSERT INTO ");
         sb.append(object.getClass().getSimpleName());
@@ -32,7 +32,7 @@ public class QueryGenerator {
         return sb.toString();
     }
 
-    public static String updateQuery(Object object) throws Exception{
+    public static String updateQuery(Object object) throws IllegalAccessException {
         StringBuilder sb = new StringBuilder();
         sb.append("UPDATE ");
         sb.append(object.getClass().getSimpleName());
@@ -67,7 +67,7 @@ public class QueryGenerator {
         return sb.toString();
     }
 
-    public static String deleteQuery(Object object) throws Exception{
+    public static String deleteQuery(Object object) throws IllegalAccessException {
         StringBuilder sb = new StringBuilder();
         sb.append("DELETE FROM ");
         sb.append(object.getClass().getSimpleName());
