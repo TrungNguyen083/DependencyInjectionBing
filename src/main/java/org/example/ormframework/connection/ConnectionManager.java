@@ -13,35 +13,26 @@ public class ConnectionManager {
     private ConfigService configService;
     private final DBConnectionConfig dbConnectionConfig;
 
-    public ConnectionManager() throws IOException {
+    public ConnectionManager() throws Exception {
         configService = new ConfigService();
         dbConnectionConfig = configService.readConfig("src\\main\\resources\\DbConnect.json", DBConnectionConfig.class);
     }
 
-    public Connection getConnection() {
+    public Connection getConnection() throws Exception {
         if (connection == null) {
-            try {
-                // Load the JDBC driver
-                Class.forName("com.mysql.cj.jdbc.Driver");
+            // Load the JDBC driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
 
-                // Create the connection
-                connection = DriverManager.getConnection(dbConnectionConfig.getURL(), dbConnectionConfig.getUsername(), dbConnectionConfig.getPassword());
-            } catch (ClassNotFoundException | SQLException e) {
-                e.printStackTrace();
-                throw new RuntimeException("Failed to establish a database connection.");
-            }
+            // Create the connection
+            connection = DriverManager.getConnection(dbConnectionConfig.getURL(), dbConnectionConfig.getUsername(), dbConnectionConfig.getPassword());
+
         }
         return connection;
     }
 
-    public void closeConnection() {
+    public void closeConnection() throws Exception {
         if (connection != null) {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-                throw new RuntimeException("Failed to close the database connection.");
-            }
+            connection.close();
         }
     }
 }
