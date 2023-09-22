@@ -1,6 +1,6 @@
 package org.example;
 
-import org.example.DILibrary.MyContainer;
+import org.example.dilibrary.MyContainer;
 import org.example.controller.AdArticleController;
 import org.example.models.AdArticle;
 import org.junit.Test;

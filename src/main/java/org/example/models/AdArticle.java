@@ -1,9 +1,9 @@
 package org.example.models;
 
 
-import org.example.ORM.annotation.Column;
-import org.example.ORM.annotation.Entity;
-import org.example.ORM.annotation.Primary;
+import org.example.ormframework.annotation.Column;
+import org.example.ormframework.annotation.Entity;
+import org.example.ormframework.annotation.Primary;
 
 @Entity(name = "adarticle")
 public class AdArticle {

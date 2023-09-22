@@ -1,7 +1,7 @@
 package org.example.controller;
 
-import org.example.DILibrary.annotation.Controller;
-import org.example.DILibrary.annotation.MyAutowired;
+import org.example.dilibrary.annotation.Controller;
+import org.example.dilibrary.annotation.MyAutowired;
 import org.example.models.AdArticle;
 import org.example.services.AdArticleService;
 

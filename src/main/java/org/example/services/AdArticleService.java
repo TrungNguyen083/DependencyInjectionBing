@@ -1,6 +1,6 @@
 package org.example.services;
 
-import org.example.ORM.repository.factory.RepositoryFactory;
+import org.example.ormframework.repository.factory.RepositoryFactory;
 import org.example.models.AdArticle;
 import org.example.repositories.AdArticleRepository;
 
