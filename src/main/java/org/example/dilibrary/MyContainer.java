@@ -1,7 +1,7 @@
 package org.example.dilibrary;
 
 import org.example.dilibrary.annotation.Controller;
-import org.example.dilibrary.annotation.MyAutowired;
+import org.example.dilibrary.annotation.Autowired;
 import org.example.dilibrary.configuaration.ControllerConfig;
 import org.example.configuration.ConfigService;
 
@@ -68,7 +68,7 @@ public class MyContainer {
 
     private Constructor<?> findAutowiredConstructor(Class<?> clazz) {
         return Arrays.stream(clazz.getDeclaredConstructors())
-                .filter(constructor -> constructor.isAnnotationPresent(MyAutowired.class))
+                .filter(constructor -> constructor.isAnnotationPresent(Autowired.class))
                 .findFirst()
                 .orElse(null);
     }

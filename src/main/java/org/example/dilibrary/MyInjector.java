@@ -1,6 +1,6 @@
 package org.example.dilibrary;
 
-import org.example.dilibrary.annotation.MyAutowired;
+import org.example.dilibrary.annotation.Autowired;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -20,7 +20,7 @@ public class MyInjector {
         Field[] fields = clazz.getDeclaredFields();
 
         Arrays.stream(fields)
-                .filter(field -> field.isAnnotationPresent(MyAutowired.class))
+                .filter(field -> field.isAnnotationPresent(Autowired.class))
                 .forEach(field -> {
                     Class<?> fieldType = field.getType();
                     Object dependency = container.getBean(fieldType);
@@ -41,7 +41,7 @@ public class MyInjector {
         Constructor<?>[] constructors = clazz.getDeclaredConstructors();
 
         for (Constructor<?> constructor : constructors) {
-            if (constructor.isAnnotationPresent(MyAutowired.class)) {
+            if (constructor.isAnnotationPresent(Autowired.class)) {
                 Class<?>[] parameterTypes = constructor.getParameterTypes();
 
                 boolean allDependenciesAvailable = Arrays.stream(parameterTypes)

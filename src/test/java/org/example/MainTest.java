@@ -25,7 +25,7 @@ public class MainTest {
         // Get instances of controller classes from the container
         AdArticleController adArticleController = container.getBean(AdArticleController.class);
         // Access controller methods
-        List<AdArticle> adArticleList = adArticleController.getAllAd();
+        String adArticleList = adArticleController.getAllAd();
 
         assertNotNull(adArticleList);
     }
@@ -36,7 +36,7 @@ public class MainTest {
 
         container.registerBean(AdArticleController.class);
         AdArticleController adArticleController = container.getBean(AdArticleController.class);
-        List<AdArticle> adArticleList = adArticleController.getAllAd();
+        String adArticleList = adArticleController.getAllAd();
 
         assertNotNull(adArticleList);
     }
