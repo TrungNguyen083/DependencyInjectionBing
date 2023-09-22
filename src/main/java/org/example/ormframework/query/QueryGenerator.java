@@ -6,8 +6,10 @@ import org.example.ormframework.annotation.Primary;
 import java.lang.reflect.Field;
 
 public class QueryGenerator {
-    private QueryGenerator() {}
-    public static String insertQuery(Object object) {
+    private QueryGenerator() {
+    }
+
+    public static String insertQuery(Object object) throws Exception {
         StringBuilder sb = new StringBuilder();
         sb.append("INSERT INTO ");
         sb.append(object.getClass().getSimpleName());
@@ -20,28 +22,23 @@ public class QueryGenerator {
         sb.append(") VALUES (");
         for (Field field : object.getClass().getDeclaredFields()) {
             field.setAccessible(true);
-            try {
-                sb.append("'");
-                sb.append(field.get(object));
-                sb.append("'");
-                sb.append(",");
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
+            sb.append("'");
+            sb.append(field.get(object));
+            sb.append("'");
+            sb.append(",");
         }
         sb.deleteCharAt(sb.length() - 1);
         sb.append(")");
         return sb.toString();
     }
 
-    public static String updateQuery(Object object) {
+    public static String updateQuery(Object object) throws Exception{
         StringBuilder sb = new StringBuilder();
         sb.append("UPDATE ");
         sb.append(object.getClass().getSimpleName());
         sb.append(" SET ");
         for (Field field : object.getClass().getDeclaredFields()) {
             field.setAccessible(true);
-            try {
                 if (field.isAnnotationPresent(Primary.class)) {
                     sb.append(field.getName());
                     sb.append("=");
@@ -65,22 +62,18 @@ public class QueryGenerator {
                     sb.append("'");
                     sb.append(",");
                 }
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
         }
         sb.deleteCharAt(sb.length() - 1);
         return sb.toString();
     }
 
-    public static String deleteQuery(Object object) {
+    public static String deleteQuery(Object object) throws Exception{
         StringBuilder sb = new StringBuilder();
         sb.append("DELETE FROM ");
         sb.append(object.getClass().getSimpleName());
         sb.append(" WHERE ");
         for (Field field : object.getClass().getDeclaredFields()) {
             field.setAccessible(true);
-            try {
                 if (field.isAnnotationPresent(Primary.class)) {
                     sb.append(field.getName());
                     sb.append("=");
@@ -89,9 +82,6 @@ public class QueryGenerator {
                     sb.append("'");
                     sb.append(";");
                 }
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
         }
         return sb.toString();
     }
