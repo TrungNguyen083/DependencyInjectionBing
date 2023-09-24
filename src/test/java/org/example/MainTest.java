@@ -26,10 +26,11 @@ public class MainTest {
         AdArticleController adArticleController = container.getBean(AdArticleController.class);
         // Access controller methods
         String adArticleList = adArticleController.getAllAd();
-
-        System.out.println(adArticleList);
+        AdController adController = container.getBean(AdController.class);
+        String allAd = adController.getAllAd();
 
         assertNotNull(adArticleList);
+        assertNotNull(allAd);
     }
 
     @Test
@@ -39,8 +40,6 @@ public class MainTest {
         container.registerBean(AdController.class);
         AdController adController = container.getBean(AdController.class);
         String adArticleList = adController.getAllAd();
-
-        System.out.println(adArticleList);
 
         assertNotNull(adArticleList);
     }
