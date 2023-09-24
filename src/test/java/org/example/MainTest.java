@@ -1,11 +1,10 @@
 package org.example;
 
+import org.example.controller.AdController;
 import org.example.dilibrary.MyContainer;
 import org.example.controller.AdArticleController;
-import org.example.models.AdArticle;
 import org.junit.Test;
 
-import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
 
@@ -16,6 +15,7 @@ public class MainTest {
         var clazz = Class.forName("org.example.controller.AdArticleController");
         assertNotNull(clazz);
     }
+
     @Test
     public void testScanAllController() throws Exception {
         MyContainer container = new MyContainer();
@@ -26,6 +26,21 @@ public class MainTest {
         AdArticleController adArticleController = container.getBean(AdArticleController.class);
         // Access controller methods
         String adArticleList = adArticleController.getAllAd();
+
+        System.out.println(adArticleList);
+
+        assertNotNull(adArticleList);
+    }
+
+    @Test
+    public void testAdController() throws Exception {
+        MyContainer container = new MyContainer();
+
+        container.registerBean(AdController.class);
+        AdController adController = container.getBean(AdController.class);
+        String adArticleList = adController.getAllAd();
+
+        System.out.println(adArticleList);
 
         assertNotNull(adArticleList);
     }

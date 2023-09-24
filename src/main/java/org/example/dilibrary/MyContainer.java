@@ -7,18 +7,16 @@ import org.example.configuration.ConfigService;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.List;
-
-import static org.example.dilibrary.MyInjector.injectDependencies;
 
 
 public class MyContainer {
     private final Map<Class<?>, Object> beanMap;
     private final List<Class<?>> registeredClasses;
     ConfigService configService;
-
     private final ControllerConfig controllerConfig;
 
     public MyContainer() throws IOException {
@@ -36,7 +34,7 @@ public class MyContainer {
         }
     }
 
-    public void registerBean(Class<?> ... listClazz) throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
+    public void registerBean(Class<?> ... listClazz) throws Exception {
         for (Class<?> clazz : listClazz) {
             if (!registeredClasses.contains(clazz)) {
                 registeredClasses.add(clazz);
@@ -61,7 +59,7 @@ public class MyContainer {
                     beanMap.put(clazz, instance);
                 }
                 // Inject dependencies into fields
-                injectDependencies(beanMap.get(clazz), this);
+                injectFields(beanMap.get(clazz), clazz);
             }
         }
     }
@@ -77,7 +75,7 @@ public class MyContainer {
         return clazz.getDeclaredConstructor().newInstance();
     }
 
-    private Object getOrCreateBean(Class<?> clazz) throws InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
+    private Object getOrCreateBean(Class<?> clazz) throws Exception {
         if (beanMap.containsKey(clazz)) {
             return beanMap.get(clazz);
         }
@@ -88,5 +86,18 @@ public class MyContainer {
 
     public <T> T getBean(Class<T> clazz) {
         return clazz.cast(beanMap.get(clazz));
+    }
+
+    private void injectFields(Object target, Class<?> clazz) throws Exception {
+        Field[] fields = clazz.getDeclaredFields();
+
+        for (Field field : fields) {
+            if (field.isAnnotationPresent(Autowired.class)) {
+                Class<?> fieldType = field.getType();
+                Object dependency = getOrCreateBean(fieldType);
+                field.setAccessible(true);
+                field.set(target, dependency);
+            }
+        }
     }
 }
