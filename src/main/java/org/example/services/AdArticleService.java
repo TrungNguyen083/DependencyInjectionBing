@@ -17,7 +17,15 @@ public class AdArticleService {
         this.adArticleRepository = (AdArticleRepository) RepositoryFactory.createRepoImpl(interfaceToImplement);
     }
 
-    public List<AdArticle> getAll() throws SQLException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
+    public List<AdArticle> getAllAd() throws SQLException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
         return adArticleRepository.findAll();
+    }
+
+    public AdArticle findAdByID(String guid) throws SQLException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException {
+        return adArticleRepository.findById(guid);
+    }
+
+    public void addAdArticle(AdArticle adArticle) throws SQLException, IllegalAccessException {
+        adArticleRepository.save(adArticle);
     }
 }

@@ -21,8 +21,6 @@ m
 =src/main/java/org/example/controller/AdArticleController.java,4\d\4db266dce045da05fcc2bd45f2e5bc7d39a582d7
 e
 5src/main/java/org/example/DILibrary/ClassScanner.java,8\5\8544c2ccd7638ad282a3d46b852d9f15a815d8ba
-c
-3src/main/java/org/example/DILibrary/MyInjector.java,f\b\fb059f4f419926c0eb88677c41f0ecec76c02e90
 d
 4src/main/java/org/example/DILibrary/MyContainer.java,c\a\ca4599eca0f4b952881d6b9006668c743c2db718
 j
@@ -80,8 +78,6 @@ m
 k
 ;src/main/java/org/example/restapi/annotation/Autowired.java,0\9\09bb0b4da76e45a771aa17846d3e103fa356daa0
 l
-<src/main/java/org/example/restapi/annotation/Controller.java,0\f\0f2c571d030261ee1a4bbf2c9743c56319b56829
-l
 <src/main/java/org/example/restapi/annotation/GetMapping.java,6\9\69cc1e7d841073aeb0f2591e1c22edbc226c09db
 i
 9src/main/java/org/example/restapi/annotation/Mapping.java,2\4\24da1ea62d4f336743af132493e29275461cacf2
@@ -103,5 +99,7 @@ h
 8src/main/java/org/example/restapi/ControllerManager.java,d\4\d4cdf0606427657d720cf0d084eb2d3b1f781fc2
 d
 4src/main/java/org/example/dilibrary/MyContainer.java,5\2\528220ff0cce1988b3d5149082022cabd8c061d5
-c
-3src/main/java/org/example/dilibrary/MyInjector.java,d\e\de2ea0b059d8d929461bc599262a362c6067fc9f
+f
+6src/main/java/org/example/controller/AdController.java,1\3\1344b4ccda9a73f5e72e75bd315eb9e28821b14c
+m
+=src/main/java/org/example/restapi/annotation/RequestBody.java,3\4\346630dde33d768acee6c514aac52edc69c2bd5c

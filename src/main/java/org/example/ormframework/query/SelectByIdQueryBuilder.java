@@ -16,7 +16,7 @@ public class SelectByIdQueryBuilder {
             if (field.isAnnotationPresent(Primary.class)) {
                 query.append(field.getName());
                 query.append(" = ");
-                query.append(id);
+                query.append("'" + id + "'");
                 query.append(";");
                 return query.toString();
             }

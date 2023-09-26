@@ -24,7 +24,7 @@ public class AdController {
 
     @GetMapping(value = "/adArticles")
     public String getAllAd() throws SQLException, InvocationTargetException, InstantiationException, IllegalAccessException, NoSuchMethodException, JsonProcessingException {
-        List<AdArticle> adArticleList = adArticleService.getAll();
+        List<AdArticle> adArticleList = adArticleService.getAllAd();
         return objectMapper.writeValueAsString(adArticleList);
     }
 }

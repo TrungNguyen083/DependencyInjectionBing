@@ -7,13 +7,18 @@ import org.example.dilibrary.MyContainer;
 import org.example.restapi.annotation.GetMapping;
 import org.example.restapi.annotation.PathVariable;
 import org.example.restapi.annotation.PostMapping;
+import org.example.restapi.annotation.RequestBody;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.example.restapi.untils.ResponseUtils.sendJsonResponse;
@@ -77,8 +82,13 @@ public class ControllerManager {
                 try {
                     Class<?> parameterType = methodParameterMap.get(patternPath);
                     if(exchange.getRequestMethod().equalsIgnoreCase("POST")){
-                        String response = (String) method.invoke(controllerInstance, exchange.getRequestBody());
-                        sendJsonResponse(exchange, 200, response);
+                        String requestBody = new BufferedReader(new InputStreamReader(exchange.getRequestBody()))
+                                .lines()
+                                .collect(Collectors.joining("\n"));
+                        if (hasRequestBodyAnnotation(method)) {
+                            String response = (String) method.invoke(controllerInstance, requestBody);
+                            sendJsonResponse(exchange, 200, response);
+                        }
                     }
                     else if(exchange.getRequestMethod().equalsIgnoreCase("GET")){
                         if (parameterType != null) {
@@ -92,6 +102,7 @@ public class ControllerManager {
                     }
                 } catch (Exception e) {
                     sendJsonResponse(exchange, 500, "Internal Server Error");
+                    throw new RuntimeException(e);
                 }
             } else {
                 sendJsonResponse(exchange, 404, "Method Not Found");
@@ -105,6 +116,22 @@ public class ControllerManager {
     }
 
     private static String transformToPattern(String inputPath) {
-        return inputPath.replaceAll("/adArticles/([0-9a-f-]+|[0-9]+)", "/adArticles/{id}");
+        String[] inputPathArray = inputPath.split("/");
+        if(inputPathArray.length > 2){
+            inputPathArray[inputPathArray.length - 1] = "{guid}";
+        }
+        return String.join("/", inputPathArray);
+    }
+
+    public boolean hasRequestBodyAnnotation(Method method) {
+        Annotation[][] annotations = method.getParameterAnnotations();
+        for (Annotation[] annotation : annotations) {
+            for (Annotation annotationItem : annotation) {
+                if (annotationItem instanceof RequestBody) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
