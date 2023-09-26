@@ -6,22 +6,21 @@ import org.example.controller.AdArticleController;
 import org.junit.jupiter.api.Test;
 
 
-import java.io.IOException;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
-public class MainTest {
+class MainTest {
 
     @Test
-    public void testGetClass() throws ClassNotFoundException {
+    void testGetClass() throws ClassNotFoundException {
         var clazz = Class.forName("org.example.controller.AdArticleController");
         assertNotNull(clazz);
     }
 
     @Test
-    public void testScanAllController() throws Exception {
+    void testScanAllController() throws Exception {
         MyContainer container = new MyContainer();
 
         // Scan and register controller classes in a specific base package
@@ -38,7 +37,7 @@ public class MainTest {
     }
 
     @Test
-    public void testAdController() throws Exception {
+    void testAdController() throws Exception {
         MyContainer container = new MyContainer();
 
         container.registerBean(AdController.class);
@@ -49,7 +48,7 @@ public class MainTest {
     }
 
     @Test
-    public void testGetAllAdArticle() throws Exception {
+    void testGetAllAdArticle() throws Exception {
         MyContainer container = new MyContainer();
 
         container.registerBean(AdArticleController.class);
@@ -60,7 +59,7 @@ public class MainTest {
     }
 
     @Test
-    public void testRegisterBean() throws Exception {
+    void testRegisterBean() throws Exception {
         MyContainer container = new MyContainer();
 
         container.registerBean(AdArticleController.class);
@@ -69,7 +68,7 @@ public class MainTest {
     }
 
     @Test
-    public void testGetBean() throws Exception {
+    void testGetBean() throws Exception {
         MyContainer container = new MyContainer();
 
         container.registerBean(AdArticleController.class);
@@ -79,7 +78,7 @@ public class MainTest {
     }
 
     @Test
-    public void testGetAdByID() throws Exception {
+    void testGetAdByID() throws Exception {
         MyContainer container = new MyContainer();
 
         container.scanAndRegisterControllers();
@@ -87,12 +86,11 @@ public class MainTest {
 
         String adArticle = adArticleController.getAdByID("0dcb1e40-bdba-41b2-8f31-da92cc65e74a");
 
-        System.out.println(adArticle);
         assertNotNull(adArticle);
     }
 
     @Test
-    public void testAddArticleWithRequestBody() throws Exception {
+    void testAddArticleWithRequestBody() throws Exception {
         MyContainer container = new MyContainer();
 
         container.scanAndRegisterControllers();
